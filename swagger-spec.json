@@ -1,0 +1,927 @@
+{
+  "openapi": "3.0.0",
+  "paths": {
+    "/api/auth/signup": {
+      "post": {
+        "operationId": "AuthController_signup",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SignupDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Utilisateur créé avec succès",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthResponseDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Email ou username déjà utilisé"
+          }
+        },
+        "summary": "Inscription d'un nouvel utilisateur",
+        "tags": [
+          "Authentication"
+        ]
+      }
+    },
+    "/api/auth/login": {
+      "post": {
+        "operationId": "AuthController_login",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Connexion réussie",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthResponseDto"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Email ou mot de passe incorrect"
+          }
+        },
+        "summary": "Connexion d'un utilisateur",
+        "tags": [
+          "Authentication"
+        ]
+      }
+    },
+    "/api/chat/general": {
+      "post": {
+        "operationId": "ChatController_sendGeneralMessage",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SendGeneralMessageDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Message envoyé",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MessageResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Envoyer un message dans le chat général",
+        "tags": [
+          "Chat"
+        ]
+      },
+      "get": {
+        "operationId": "ChatController_getGeneralMessages",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Liste des messages",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/MessageResponseDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "summary": "Récupérer les messages du chat général",
+        "tags": [
+          "Chat"
+        ]
+      }
+    },
+    "/api/chat/direct": {
+      "post": {
+        "operationId": "ChatController_sendDirectMessage",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SendDirectMessageDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Message envoyé",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MessageResponseDto"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Envoyer un message direct",
+        "tags": [
+          "Chat"
+        ]
+      }
+    },
+    "/api/chat/conversation/{otherUserId}": {
+      "get": {
+        "operationId": "ChatController_getConversation",
+        "parameters": [
+          {
+            "name": "otherUserId",
+            "required": true,
+            "in": "path",
+            "description": "ID de l'autre utilisateur",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Messages de la conversation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/MessageResponseDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Récupérer une conversation avec un utilisateur",
+        "tags": [
+          "Chat"
+        ]
+      }
+    },
+    "/api/chat/conversations": {
+      "get": {
+        "operationId": "ChatController_getConversations",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Liste des conversations"
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Récupérer toutes les conversations de l'utilisateur",
+        "tags": [
+          "Chat"
+        ]
+      }
+    },
+    "/api/chat/mark-read/{messageId}": {
+      "post": {
+        "operationId": "ChatController_markAsRead",
+        "parameters": [
+          {
+            "name": "messageId",
+            "required": true,
+            "in": "path",
+            "description": "ID du message",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Message marqué comme lu"
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Marquer un message comme lu",
+        "tags": [
+          "Chat"
+        ]
+      }
+    },
+    "/api/podcasts": {
+      "post": {
+        "operationId": "PodcastController_createPodcast",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreatePodcastDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Podcast créé",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PodcastResponseDto"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Vous ne pouvez pas publier de podcasts"
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Créer un nouveau podcast (publishers uniquement)",
+        "tags": [
+          "Podcasts"
+        ]
+      },
+      "get": {
+        "operationId": "PodcastController_getAllPodcasts",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Liste des podcasts",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PodcastResponseDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "summary": "Récupérer tous les podcasts",
+        "tags": [
+          "Podcasts"
+        ]
+      }
+    },
+    "/api/podcasts/{id}": {
+      "get": {
+        "operationId": "PodcastController_getPodcastById",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "ID du podcast",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Détails du podcast",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PodcastResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Podcast non trouvé"
+          }
+        },
+        "summary": "Récupérer un podcast par son ID",
+        "tags": [
+          "Podcasts"
+        ]
+      },
+      "delete": {
+        "operationId": "PodcastController_deletePodcast",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "ID du podcast",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Podcast supprimé"
+          },
+          "403": {
+            "description": "Vous ne pouvez pas supprimer ce podcast"
+          },
+          "404": {
+            "description": "Podcast non trouvé"
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Supprimer un podcast",
+        "tags": [
+          "Podcasts"
+        ]
+      }
+    },
+    "/api/podcasts/publisher/{publisherId}": {
+      "get": {
+        "operationId": "PodcastController_getPodcastsByPublisher",
+        "parameters": [
+          {
+            "name": "publisherId",
+            "required": true,
+            "in": "path",
+            "description": "ID du publisher",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Liste des podcasts du publisher",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PodcastResponseDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Récupérer les podcasts d'un publisher",
+        "tags": [
+          "Podcasts"
+        ]
+      }
+    },
+    "/api/users": {
+      "get": {
+        "operationId": "UsersController_getAllUsers",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Liste des utilisateurs",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/UserResponseDto"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "summary": "Récupérer tous les utilisateurs",
+        "tags": [
+          "Users"
+        ]
+      }
+    },
+    "/api/users/{id}": {
+      "get": {
+        "operationId": "UsersController_getUserById",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "ID de l'utilisateur",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Détails de l'utilisateur",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Utilisateur non trouvé"
+          }
+        },
+        "summary": "Récupérer un utilisateur par son ID",
+        "tags": [
+          "Users"
+        ]
+      },
+      "put": {
+        "operationId": "UsersController_updateUser",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "ID de l'utilisateur",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateUserDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Utilisateur mis à jour",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Utilisateur non trouvé"
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Mettre à jour un utilisateur",
+        "tags": [
+          "Users"
+        ]
+      },
+      "delete": {
+        "operationId": "UsersController_deleteUser",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "ID de l'utilisateur",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Utilisateur supprimé"
+          },
+          "404": {
+            "description": "Utilisateur non trouvé"
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Supprimer un utilisateur",
+        "tags": [
+          "Users"
+        ]
+      }
+    },
+    "/api/users/{id}/make-publisher": {
+      "put": {
+        "operationId": "UsersController_makePublisher",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "description": "ID de l'utilisateur",
+            "schema": {
+              "type": "number"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Utilisateur promu en publisher",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserResponseDto"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Utilisateur non trouvé"
+          }
+        },
+        "security": [
+          {
+            "JWT-auth": []
+          }
+        ],
+        "summary": "Promouvoir un utilisateur en publisher",
+        "tags": [
+          "Users"
+        ]
+      }
+    }
+  },
+  "info": {
+    "title": "EduLearn API",
+    "description": "API pour la plateforme EduLearn",
+    "version": "1.0",
+    "contact": {}
+  },
+  "tags": [],
+  "servers": [],
+  "components": {
+    "securitySchemes": {
+      "JWT-auth": {
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "type": "http"
+      }
+    },
+    "schemas": {
+      "SignupDto": {
+        "type": "object",
+        "properties": {
+          "username": {
+            "type": "string",
+            "example": "john_doe",
+            "description": "Nom d'utilisateur unique"
+          },
+          "email": {
+            "type": "string",
+            "example": "john@example.com",
+            "description": "Adresse email valide"
+          },
+          "password": {
+            "type": "string",
+            "example": "Password123!",
+            "description": "Mot de passe (minimum 6 caractères)",
+            "minLength": 6
+          }
+        },
+        "required": [
+          "username",
+          "email",
+          "password"
+        ]
+      },
+      "AuthResponseDto": {
+        "type": "object",
+        "properties": {
+          "access_token": {
+            "type": "string",
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+            "description": "Token JWT"
+          },
+          "user": {
+            "type": "object",
+            "example": {
+              "id": 1,
+              "username": "john_doe",
+              "email": "john@example.com",
+              "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=john",
+              "isPublisher": false
+            },
+            "description": "Informations utilisateur"
+          }
+        },
+        "required": [
+          "access_token",
+          "user"
+        ]
+      },
+      "LoginDto": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "example": "john@example.com",
+            "description": "Adresse email"
+          },
+          "password": {
+            "type": "string",
+            "example": "Password123!",
+            "description": "Mot de passe"
+          }
+        },
+        "required": [
+          "email",
+          "password"
+        ]
+      },
+      "SendGeneralMessageDto": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "string",
+            "example": "Bonjour à tous !",
+            "description": "Contenu du message"
+          }
+        },
+        "required": [
+          "content"
+        ]
+      },
+      "MessageResponseDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number",
+            "example": 1
+          },
+          "content": {
+            "type": "string",
+            "example": "Bonjour à tous !"
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2025-10-25T12:00:00.000Z"
+          },
+          "sender": {
+            "type": "object",
+            "example": {
+              "id": 1,
+              "username": "john_doe",
+              "avatar": "https://api.dicebear.com/7.x/avataaars/svg?seed=john"
+            }
+          }
+        },
+        "required": [
+          "id",
+          "content",
+          "createdAt",
+          "sender"
+        ]
+      },
+      "SendDirectMessageDto": {
+        "type": "object",
+        "properties": {
+          "recipientId": {
+            "type": "number",
+            "example": 2,
+            "description": "ID du destinataire"
+          },
+          "content": {
+            "type": "string",
+            "example": "Salut, comment ça va ?",
+            "description": "Contenu du message"
+          }
+        },
+        "required": [
+          "recipientId",
+          "content"
+        ]
+      },
+      "CreatePodcastDto": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "example": "Introduction à JavaScript",
+            "description": "Titre du podcast"
+          },
+          "description": {
+            "type": "string",
+            "example": "Apprenez les bases de JavaScript en 30 minutes",
+            "description": "Description du podcast"
+          },
+          "duration": {
+            "type": "string",
+            "example": "30 min",
+            "description": "Durée du podcast"
+          },
+          "audioUrl": {
+            "type": "string",
+            "example": "https://example.com/podcasts/js-intro.mp3",
+            "description": "URL du fichier audio"
+          },
+          "imageUrl": {
+            "type": "string",
+            "example": "https://example.com/images/js-podcast.jpg",
+            "description": "URL de l'image de couverture"
+          }
+        },
+        "required": [
+          "title",
+          "description",
+          "duration",
+          "audioUrl"
+        ]
+      },
+      "PodcastResponseDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number",
+            "example": 1
+          },
+          "title": {
+            "type": "string",
+            "example": "Introduction à JavaScript"
+          },
+          "description": {
+            "type": "string",
+            "example": "Apprenez les bases de JavaScript"
+          },
+          "duration": {
+            "type": "string",
+            "example": "30 min"
+          },
+          "audioUrl": {
+            "type": "string",
+            "example": "https://example.com/audio.mp3"
+          },
+          "imageUrl": {
+            "type": "string",
+            "example": "https://example.com/image.jpg"
+          },
+          "views": {
+            "type": "number",
+            "example": 150
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2025-10-25T12:00:00.000Z"
+          },
+          "publisher": {
+            "type": "object",
+            "example": {
+              "id": 1,
+              "username": "john_doe",
+              "email": "john@example.com"
+            }
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "description",
+          "duration",
+          "audioUrl",
+          "imageUrl",
+          "views",
+          "createdAt",
+          "publisher"
+        ]
+      },
+      "UserResponseDto": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number",
+            "example": 1
+          },
+          "username": {
+            "type": "string",
+            "example": "john_doe"
+          },
+          "email": {
+            "type": "string",
+            "example": "john@example.com"
+          },
+          "avatar": {
+            "type": "string",
+            "example": "https://api.dicebear.com/7.x/avataaars/svg?seed=john"
+          },
+          "isPublisher": {
+            "type": "boolean",
+            "example": false
+          },
+          "createdAt": {
+            "format": "date-time",
+            "type": "string",
+            "example": "2025-10-25T12:00:00.000Z"
+          }
+        },
+        "required": [
+          "id",
+          "username",
+          "email",
+          "avatar",
+          "isPublisher",
+          "createdAt"
+        ]
+      },
+      "UpdateUserDto": {
+        "type": "object",
+        "properties": {
+          "username": {
+            "type": "string",
+            "example": "john_doe_updated",
+            "description": "Nouveau nom d'utilisateur"
+          },
+          "email": {
+            "type": "string",
+            "example": "newemail@example.com",
+            "description": "Nouvelle adresse email"
+          },
+          "password": {
+            "type": "string",
+            "example": "NewPassword123!",
+            "description": "Nouveau mot de passe"
+          },
+          "avatar": {
+            "type": "string",
+            "example": "https://api.dicebear.com/7.x/avataaars/svg?seed=newavatar",
+            "description": "URL du nouvel avatar"
+          },
+          "isPublisher": {
+            "type": "boolean",
+            "example": true,
+            "description": "Statut publisher"
+          }
+        }
+      }
+    }
+  }
+}
