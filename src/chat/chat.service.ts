@@ -32,7 +32,7 @@ export class ChatService {
   async getGeneralMessages(limit: number = 50) {
     return this.generalMessageRepository.find({
       relations: ['sender'],
-      order: { createdAt: 'DESC' },
+      order: { createdAt: 'ASC' },
       take: limit,
     });
   }
